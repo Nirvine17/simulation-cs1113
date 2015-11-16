@@ -1,7 +1,7 @@
 import runWorld as rw
 import drawWorld as dw
 import pygame as pg
-
+from random import randint
 ################################################################
 
 # This program is an interactive simulation/game. A cat starts
@@ -31,24 +31,32 @@ import pygame as pg
 
 # Initialize world
 name = "Cat Fun. Press the mouse (but not too fast)!"
-width = 500
-height = 500
+width = 1000
+height = 1000
 rw.newDisplay(width, height, name)
+
+################################################################
+
+# Game options
+maxObjects = 10 # maximum number of objects on the screen at a given time
+objectChance = .01 # chance of spawning a new object
 
 ################################################################
 
 # Display the state by drawing a cat at that x coordinate
 myimage = dw.loadImage("cat.bmp")
-mouseimage = dw.loadImage("rsz_pc5odreqi.png")
 
 # state -> image (IO)
 # draw the cat halfway up the screen (height/2) and at the x
 # coordinate given by the first component of the state tuple
-#
-def updateDisplay(state):
+
+
+def updateDisplay(currentStateX, currentStateY, currentStateVel):
     dw.fill(dw.black)
-    dw.draw(mouseimage, (width/2, state[0]))
-    dw.draw(myimage, (state[0], height/2))
+    #dw.draw(myimage,(currentStateX[0],currentStateY[0]))
+    for i in range(0,5):
+        dw.draw(myimage,(currentStateX[i],currentStateY[i]))
+    # dw.draw(myimage,(150,150))
 
 
 ################################################################
@@ -59,20 +67,28 @@ def updateDisplay(state):
 # components by name (as we saw with records in Idris).
 #
 # state -> state
-def updateState(state):
-    return((state[0]+state[1],state[1]))
+def updateState(currentStateX, currentStateY, currentStateVel):
+    for i in range(0,5):
+        currentStateY[i] += randint(1,2)
+    return(currentStateX, currentStateY, currentStateVel)
 
 ################################################################
 
 # Terminate the simulation when the x coord reaches the screen edge,
 # that is, when pos is less then zero or greater than the screen width
 # state -> bool
-def endState(state):
-    if (state[0] > width or state[0] < 0):
-        return True
-    else:
-        return False
+def endState(currentStateX, currentStateY, currentStateVel):
+    # if (state[0] > width or state[0] < 0):
+    #     return True
+    # elif (state[2] > height or state[2] < 0):
+    #     return True
+    return False
 
+# def endState(state):
+#     if (state[0] > width or state[0] < 0):
+#         return True
+#     else:
+#         return False
 
 ################################################################
 
@@ -88,26 +104,43 @@ def endState(state):
 # state -> event -> state
 #
 def handleEvent(state, event):
-#    print("Handling event: " + str(event))
-    if (event.type == pg.KEYDOWN):
-        if (event.key == pg.K_RIGHT):
-            newState = 1
-        if (event.key == pg.K_LEFT):
-            newState = -1
-        return((state[0],newState))
-    else:
-        return(state)
+# #    print("Handling event: " + str(event))
+#     if (event.type == pg.MOUSEBUTTONDOWN):
+#         state[1] = randint(1,3)
+#         state[3] = randint(1,3)
+#
+#         if randint(0,1) == 1:
+#             if (state[1]) == 1*state[1]:
+#                 state[1] = -1*state[1]
+#             else:
+#                 state[1] = 1*state[1]
+#
+#
+#             if (state[3]) == 1*state[3]:
+#                 state[3] = -1*state[3]
+#             else:
+#                 state[3] = 1*state[3]
+#
+#     return([state[0],state[1],state[2],state[3]])
+    #else:
+    return(state)
 
 ################################################################
 
 # World state will be single x coordinate at left edge of world
 
 # The cat starts at the left, moving right
-initState = (0,1)
+#initState = [randint(1,300),0, 0,1]
+
+initStateX = [100, 300, 400, 500, 600]
+# initStateX is temporary.  It will start with one value and append more objects in update
+initStateX = [randint(0,width),randint(0,width),randint(0,width),randint(0,width),randint(0,width)]
+initStateY = [0, 0, 0, 0, 0]
+initStateVel = [1, 1, 1, 1, 1]
 
 # Run the simulation no faster than 60 frames per second
 frameRate = 60
 
 # Run the simulation!
-rw.runWorld(initState, updateDisplay, updateState, handleEvent,
+rw.runWorld(initStateY, initStateX, initStateVel, updateDisplay, updateState, handleEvent,
             endState, frameRate)

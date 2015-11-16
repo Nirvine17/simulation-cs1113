@@ -20,8 +20,7 @@ def newDisplay(win_width, win_height, win_caption):
     clock = pg.time.Clock()
 
 
-def runWorld(initState, updateDisplay, updateState, handleEvent,
-             endState, frameRate):
+def runWorld(initStateY, initStateX, initStateVel, updateDisplay, updateState, handleEvent, endState, frameRate):
     '''Purpose: coinductively run world: exit if in end state
     otherwise set current state to init state, and then
     iteratively render the current state, update it, iterate.
@@ -30,13 +29,15 @@ def runWorld(initState, updateDisplay, updateState, handleEvent,
         (state -> state) - (state -> bool) -> unit
     Effects: display specified sequence of world states until done'''
     done = False
-    currentState = initState
+    currentStateX = initStateX
+    currentStateY = initStateY
+    currentStateVel = initStateVel
     while not done:
-        updateDisplay(currentState)
+        updateDisplay(currentStateX, currentStateY, currentStateVel)
         pg.display.update()
         clock.tick(frameRate)
-        currentState = updateState(currentState)
-        if (endState(currentState)):
+        currentState = updateState(currentStateX, currentStateY, currentStateVel)
+        if (endState(currentStateX, currentStateY, currentStateVel)):
             done = True
         for event in pg.event.get():
             if (event.type == pg.QUIT):
