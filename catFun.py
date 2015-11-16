@@ -32,14 +32,14 @@ from random import randint
 # Initialize world
 name = "Cat Fun. Press the mouse (but not too fast)!"
 width = 1000
-height = 1000
+height = 800
 rw.newDisplay(width, height, name)
 
 ################################################################
 
 # Game options
 maxObjects = 10 # maximum number of objects on the screen at a given time
-objectChance = .01 # chance of spawning a new object
+objectChance = .05*100 # chance of spawning a new object
 
 ################################################################
 
@@ -54,7 +54,7 @@ myimage = dw.loadImage("cat.bmp")
 def updateDisplay(currentStateX, currentStateY, currentStateVel):
     dw.fill(dw.black)
     #dw.draw(myimage,(currentStateX[0],currentStateY[0]))
-    for i in range(0,5):
+    for i in range(0,len(currentStateX)):
         dw.draw(myimage,(currentStateX[i],currentStateY[i]))
     # dw.draw(myimage,(150,150))
 
@@ -68,8 +68,16 @@ def updateDisplay(currentStateX, currentStateY, currentStateVel):
 #
 # state -> state
 def updateState(currentStateX, currentStateY, currentStateVel):
-    for i in range(0,5):
+    for i in range(0,len(currentStateX)):
         currentStateY[i] += randint(1,2)
+    if randint(0,100) <= objectChance:
+        currentStateX.append(randint(0,width))
+        currentStateY.append(0)
+        currentStateVel.append(randint(1,2))
+        # if i > 500:
+        #     del currentStateX[i]
+        #     del currentStateY[i]
+        #     del currentStateVel[i]
     return(currentStateX, currentStateY, currentStateVel)
 
 ################################################################
@@ -132,9 +140,9 @@ def handleEvent(state, event):
 # The cat starts at the left, moving right
 #initState = [randint(1,300),0, 0,1]
 
-initStateX = [100, 300, 400, 500, 600]
 # initStateX is temporary.  It will start with one value and append more objects in update
-initStateX = [randint(0,width),randint(0,width),randint(0,width),randint(0,width),randint(0,width)]
+# initStateX = [randint(0,width),randint(0,width),randint(0,width),randint(0,width),randint(0,width)]
+initStateX = [randint(0,width)]
 initStateY = [0, 0, 0, 0, 0]
 initStateVel = [1, 1, 1, 1, 1]
 
