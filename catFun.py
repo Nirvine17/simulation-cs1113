@@ -46,6 +46,7 @@ objectChance = .05*100 # chance of spawning a new object
 # Display the state by drawing a cat at that x coordinate
 myimage = dw.loadImage("cat.bmp")
 
+
 # state -> image (IO)
 # draw the cat halfway up the screen (height/2) and at the x
 # coordinate given by the first component of the state tuple
