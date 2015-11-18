@@ -28,7 +28,7 @@ def texts_objects(text, font):
     return textsurface, textsurface.get_rect()
 
 def message_display(text):
-    largetext = pygame.font.Font('freesansbold.ttf', 75)
+    largetext = pygame.font.Font('freesansbold.ttf', 25)
     textsurf, textrect = texts_objects(text, largetext)
     textrect.center = ((display_width/2), (display_height/2))
     gameDisplay.blit(textsurf, textrect)
@@ -36,11 +36,15 @@ def message_display(text):
     time.sleep(2)
     gameloop()
 def crash():
-    print ("You lasted for", time.get_ticks()/1000, "seconds!")
-    message_display('You Lose')
+    n = time.get_ticks()/1000
+    s = str(n)
+    string = "You lasted for " + s + " seconds"
+    message_display(string)
 def gameloop():
     x = (display_width * 0.45)
     y = (display_height * 0.8)
+
+
 
     x_change = 0
 
