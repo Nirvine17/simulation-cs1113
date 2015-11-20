@@ -14,6 +14,7 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0,0,255)
 
+
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Dodge')
 clock = pygame.time.Clock()
@@ -27,23 +28,24 @@ def texts_objects(text, font):
     textsurface = font.render(text, True, black)
     return textsurface, textsurface.get_rect()
 
-def message_display(text):
+def message_display(text, ct):
     largetext = pygame.font.Font('freesansbold.ttf', 25)
     textsurf, textrect = texts_objects(text, largetext)
     textrect.center = ((display_width/2), (display_height/2))
     gameDisplay.blit(textsurf, textrect)
     pygame.display.update()
-    time.sleep(2)
-    gameloop()
-def crash():
-    n = time.get_ticks()/1000
+    pygame.time.wait(2000)
+    gameloop(ct+2000);
+def crash(ct):
+    n = (time.get_ticks() - ct)/1000
     s = str(n)
+    ct = time.get_ticks();
     string = "You lasted for " + s + " seconds"
-    message_display(string)
-def gameloop():
+    message_display(string, ct)
+
+def gameloop(ct):
     x = (display_width * 0.45)
     y = (display_height * 0.8)
-
 
 
     x_change = 0
@@ -76,9 +78,8 @@ def gameloop():
         blocks_starty += blocks_speed
 
         mouse(x,y)
-
         if x > display_width - mousewidth or x < 0:
-            crash()
+            crash(ct)
         if blocks_starty > display_height:
             blocks_starty = 0 - blocks_height
             blocks_startx = random.randrange(0, display_width)
@@ -87,9 +88,9 @@ def gameloop():
 
             if x > blocks_startx and x < blocks_startx + blocks_width or x+mousewidth > blocks_startx and x + mousewidth < blocks_startx+blocks_width:
 
-                crash()
+                crash(ct)
         pygame.display.update()
         clock.tick(60)
-gameloop()
+gameloop(0)
 pygame.quit()
 quit()
