@@ -40,6 +40,7 @@ def crash():
     s = str(n)
     string = "You lasted for " + s + " seconds"
     message_display(string)
+
 def gameloop():
     x = (display_width * 0.45)
     y = (display_height * 0.8)
