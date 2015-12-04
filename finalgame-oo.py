@@ -23,15 +23,17 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Dodge')
 clock = pygame.time.Clock()
 
-# updates the position of falling blocks on the screen
+class Player():
+    def __init__(self):
+        self.x = (display_width * 0.45)
+        self.y = (display_height * 0.8)
+
+    def mouse(self):
+        gameDisplay.blit(image, (self.x, self.y))
+
 def blocks(blockx, blocky, blockw, blockh, color):
     pygame.draw.rect(gameDisplay, color, [blockx, blocky, blockw, blockh])
 
-# update position of player character
-def mouse(x,y):
-    gameDisplay.blit(image, (x,y))
-
-# display text on screen
 def texts_objects(text, font):
     textsurface = font.render(text, True, black)
     return textsurface, textsurface.get_rect()
@@ -56,8 +58,6 @@ def crash(ct):
 
 # main game loop, updates objects on screen and detects collision
 def gameloop(ct):
-    x = (display_width * 0.45)
-    y = (display_height * 0.8)
     x_change = 0
 
     blocks_startx = random.randrange(0, display_width)
@@ -81,28 +81,28 @@ def gameloop(ct):
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
 
-        x += x_change
+        player.x += x_change
         gameDisplay.fill(white)
 
         blocks(blocks_startx, blocks_starty, blocks_width, blocks_height, black)
         blocks_starty += blocks_speed
 
-        mouse(x,y)
+        player.mouse()
 
-        if x > display_width - mousewidth or x < 0:
+        if player.x > display_width - mousewidth or player.x < 0:
             crash(ct)
 
         if blocks_starty > display_height:
             blocks_starty = 0 - blocks_height
             blocks_startx = random.randrange(0, display_width)
 
-        if y < blocks_starty+blocks_height:
-             if x > blocks_startx and x < blocks_startx + blocks_width or x+mousewidth > blocks_startx and x + mousewidth < blocks_startx+blocks_width:
+        if player.y < blocks_starty+blocks_height:
+             if player.x > blocks_startx and player.x < blocks_startx + blocks_width or player.x+mousewidth > blocks_startx and player.x + mousewidth < blocks_startx+blocks_width:
                 crash(ct)
 
         pygame.display.update()
         clock.tick(60)
-
+player = Player()
 gameloop(0)
 pygame.quit()
 quit()

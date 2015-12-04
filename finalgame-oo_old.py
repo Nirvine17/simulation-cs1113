@@ -9,7 +9,7 @@ pygame.init()
 display_width = 400
 display_height = 500
 mousewidth = 75
-image = pygame.image.load('mouse.png')
+#image = pygame.image.load('mouse.png')
 
 #### color options #######################
 black = (0,0,0)
@@ -18,33 +18,56 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0,0,255)
 
-#### Initialize Pygame #################################
-gameDisplay = pygame.display.set_mode((display_width, display_height))
+#### Inititalize Object Parameters  #################################
+init_x = random.randrange(0, display_width)
+init_y = -600
+init_vel = randint(10,16)
+init_w = 100
+init_h = 100
+
 pygame.display.set_caption('Dodge')
-clock = pygame.time.Clock()
 
-# updates the position of falling blocks on the screen
-def blocks(blockx, blocky, blockw, blockh, color):
-    pygame.draw.rect(gameDisplay, color, [blockx, blocky, blockw, blockh])
+class State():
+    gameExit = False
+    gameDisplay = pygame.display.set_mode((display_width, display_height))
 
-# update position of player character
-def mouse(x,y):
-    gameDisplay.blit(image, (x,y))
+    def blocks(self, color=black):
+        pygame.draw.rect(gameDisplay, color, [block_x, block_y, block_w, blockh])
 
-# display text on screen
-def texts_objects(text, font):
-    textsurface = font.render(text, True, black)
-    return textsurface, textsurface.get_rect()
+    def __init__(self):
+        self.image = pygame.image.load('mouse.png')
+        self.gameDisplay = pygame.display.set_mode((display_width, display_height))
+        self.clock = pygame.time.Clock()
+        self.block_x = init_x
+        self.block_y = init_y
+        self.block_w = init_w
+        self.block_h = init_h
+
+game = State()
+
+print(game)
+
+
+class Player(State):
+    def mouse(x,y):
+        gameDisplay.blit(image, (x,y))
+
+    def texts_objects(text, font):
+        textsurface = font.render(text, True, black)
+        return textsurface, textsurface.get_rect()
+
+    def message_display(text, ct):
+        largetext = pygame.font.Font('freesansbold.ttf', 25)
+        textsurf, textrect = texts_objects(text, largetext)
+        textrect.center = ((display_width/2), (display_height/2))
+        gameDisplay.blit(textsurf, textrect)
+        pygame.display.update()
+        pygame.time.wait(2000)
+        gameloop(ct+2000);
+
 
 # text display settings
-def message_display(text, ct):
-    largetext = pygame.font.Font('freesansbold.ttf', 25)
-    textsurf, textrect = texts_objects(text, largetext)
-    textrect.center = ((display_width/2), (display_height/2))
-    gameDisplay.blit(textsurf, textrect)
-    pygame.display.update()
-    pygame.time.wait(2000)
-    gameloop(ct+2000);
+
 
 # when game ends displays how long the player survived
 def crash(ct):
@@ -60,12 +83,7 @@ def gameloop(ct):
     y = (display_height * 0.8)
     x_change = 0
 
-    blocks_startx = random.randrange(0, display_width)
-    blocks_starty = -600
-    blocks_speed = randint(10,16)
-    blocks_width = 100
-    blocks_height = 100
-    gameExit = False
+
 
     while not gameExit:
         for event in pygame.event.get():
@@ -102,7 +120,6 @@ def gameloop(ct):
 
         pygame.display.update()
         clock.tick(60)
-
 gameloop(0)
 pygame.quit()
 quit()
