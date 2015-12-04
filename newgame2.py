@@ -2,6 +2,7 @@ import pygame
 import time
 import random
 from pygame import *
+from random import randint
 pygame.init()
 
 #### Game Settings #######################
@@ -62,7 +63,7 @@ def gameloop(ct):
 
     blocks_startx = random.randrange(0, display_width)
     blocks_starty = -600
-    blocks_speed = 7
+    blocks_speed = randint(10,16)
     blocks_width = 100
     blocks_height = 100
     gameExit = False

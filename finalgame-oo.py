@@ -30,9 +30,15 @@ class Player():
 
     def mouse(self):
         gameDisplay.blit(image, (self.x, self.y))
-
-def blocks(blockx, blocky, blockw, blockh, color):
-    pygame.draw.rect(gameDisplay, color, [blockx, blocky, blockw, blockh])
+class Blocks():
+    def __init__(self):
+        self.blocks_startx = random.randrange(0, display_width)
+        self.blocks_starty = -600
+        self.blocks_speed = randint(10,16)
+        self.blocks_width = 100
+        self.blocks_height = 100
+    def blocks(self):
+        pygame.draw.rect(gameDisplay, color, [self.blocks_startx, self.blocks_starty, self.blocks_width, self.blocks_height])
 
 def texts_objects(text, font):
     textsurface = font.render(text, True, black)
@@ -60,11 +66,7 @@ def crash(ct):
 def gameloop(ct):
     x_change = 0
 
-    blocks_startx = random.randrange(0, display_width)
-    blocks_starty = -600
-    blocks_speed = randint(10,16)
-    blocks_width = 100
-    blocks_height = 100
+
     gameExit = False
 
     while not gameExit:
@@ -84,25 +86,26 @@ def gameloop(ct):
         player.x += x_change
         gameDisplay.fill(white)
 
-        blocks(blocks_startx, blocks_starty, blocks_width, blocks_height, black)
-        blocks_starty += blocks_speed
+        Blocks.blocks(black)
+        block.blocks_starty += block.blocks_speed
 
         player.mouse()
 
         if player.x > display_width - mousewidth or player.x < 0:
             crash(ct)
 
-        if blocks_starty > display_height:
-            blocks_starty = 0 - blocks_height
-            blocks_startx = random.randrange(0, display_width)
+        if block.blocks_starty > display_height:
+            block.blocks_starty = 0 - block.blocks_height
+            block.blocks_startx = random.randrange(0, display_width)
 
-        if player.y < blocks_starty+blocks_height:
-             if player.x > blocks_startx and player.x < blocks_startx + blocks_width or player.x+mousewidth > blocks_startx and player.x + mousewidth < blocks_startx+blocks_width:
+        if player.y < block.blocks_starty+block.blocks_height:
+             if player.x > block.blocks_startx and player.x < block.blocks_startx + block.blocks_width or player.x+mousewidth > block.blocks_startx and player.x + mousewidth < block.blocks_startx+ block.blocks_width:
                 crash(ct)
 
         pygame.display.update()
         clock.tick(60)
 player = Player()
+block = Blocks()
 gameloop(0)
 pygame.quit()
 quit()
