@@ -62,7 +62,7 @@ def gameloop(ct):
 
     blocks_startx = random.randrange(0, display_width)
     blocks_starty = -600
-    blocks_speed = randint(10,16)
+    blocks_speed = randint(7,13)
     blocks_width = 100
     blocks_height = 100
     gameExit = False
