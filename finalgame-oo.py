@@ -30,6 +30,7 @@ class Player():
 
     def mouse(self):
         gameDisplay.blit(image, (self.x, self.y))
+
 class Blocks():
     def __init__(self):
         self.blocks_startx = random.randrange(0, display_width)
@@ -37,8 +38,9 @@ class Blocks():
         self.blocks_speed = randint(10,16)
         self.blocks_width = 100
         self.blocks_height = 100
-    def blocks(self):
-        pygame.draw.rect(gameDisplay, color, [self.blocks_startx, self.blocks_starty, self.blocks_width, self.blocks_height])
+
+def blocks(blocks_startx, blocks_starty, blocks_width, blocks_height, color):
+    pygame.draw.rect(gameDisplay, color, [blocks_startx, blocks_starty, blocks_width, blocks_height])
 
 def texts_objects(text, font):
     textsurface = font.render(text, True, black)
@@ -65,8 +67,6 @@ def crash(ct):
 # main game loop, updates objects on screen and detects collision
 def gameloop(ct):
     x_change = 0
-
-
     gameExit = False
 
     while not gameExit:
@@ -86,7 +86,7 @@ def gameloop(ct):
         player.x += x_change
         gameDisplay.fill(white)
 
-        Blocks.blocks(black)
+        blocks(block.blocks_startx, block.blocks_starty, block.blocks_width, block.blocks_height,black)
         block.blocks_starty += block.blocks_speed
 
         player.mouse()
